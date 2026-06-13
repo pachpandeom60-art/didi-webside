@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ayuroma® | Pure Herbal Luxury – Ayurvedic Soap</title>
+  <meta name="description" content="Ayuroma Ayurvedic Soap – crafted with Manjistha, Palash, Mulethi, Haldi, Rose Essential Oil and Goat Milk Base. 100% Natural, Handmade & Herbal for radiant and healthy skin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style-premium.css?v=4" />
+</head>
+<body>
+
+  <!-- ======== CURSOR GLOW ======== -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-trail" id="cursorTrail"></div>
+
+  <!-- ======== FLOATING PETALS ======== -->
+  <div class="petals-container" id="petalsContainer"></div>
+
+  <!-- ======== NAVBAR ======== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Ayuroma Logo" class="nav-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <div class="fallback-logo" style="display: none; align-items: baseline; gap: 2px;">
+        <span class="logo-text">AYUROMA</span>
+        <span class="logo-reg">®</span>
+      </div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#ingredients">Ingredients</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+        <span class="theme-toggle-icon">🌙</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ======== HERO ======== -->
+  <section id="home" class="hero">
+    <div class="hero-bg-texture"></div>
+    <div class="hero-botanical hero-botanical--left">
+      <img src="assets/hero-round.jpg" alt="Ayuroma Round Soap with herbal ingredients" class="hero-product-img float-anim" />
+    </div>
+    <div class="hero-content fade-up">
+      <p class="hero-eyebrow">100% Natural &amp; Ayurvedic</p>
+      <h1 class="hero-title">Pure Herbal<br /><em>Luxury</em></h1>
+      <p class="hero-subtitle">Infused with Nature's Finest Ingredients</p>
+      <p class="hero-tagline">Discover Radiant &amp; Healthy Skin</p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn--primary" id="heroExploreBtn">Explore Collection</a>
+        <a href="#ingredients" class="btn btn--outline" id="heroLearnBtn">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-botanical hero-botanical--right">
+      <img src="assets/hero-square.jpg" alt="Ayuroma Square Soap with herbal ingredients" class="hero-product-img float-anim float-anim--delay" />
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ======== MARQUEE STRIP ======== -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <span>✦ Natural</span>
+      <span>✦ Handmade</span>
+      <span>✦ Herbal</span>
+      <span>✦ Ayurvedic</span>
+      <span>✦ Goat Milk Base</span>
+      <span>✦ Rose Essential Oil</span>
+      <span>✦ Manjistha</span>
+      <span>✦ Haldi</span>
+      <span>✦ Mulethi</span>
+      <span>✦ Natural</span>
+      <span>✦ Handmade</span>
+      <span>✦ Herbal</span>
+      <span>✦ Ayurvedic</span>
+      <span>✦ Goat Milk Base</span>
+      <span>✦ Rose Essential Oil</span>
+      <span>✦ Manjistha</span>
+      <span>✦ Haldi</span>
+      <span>✦ Mulethi</span>
+    </div>
+  </div>
+
+  <!-- ======== OUR STORY ======== -->
+  <section id="story" class="story section">
+    <div class="story-inner">
+      <div class="story-image-wrap fade-left">
+        <img src="assets/label.jpg" alt="Ayuroma Ayurvedic Soap Label" class="story-img" />
+        <div class="story-img-glow"></div>
+      </div>
+      <div class="story-text fade-right">
+        <p class="section-eyebrow">Our Philosophy</p>
+        <h2 class="section-title">Ancient Wisdom,<br /><em>Modern Luxury</em></h2>
+        <p class="story-body">Ayuroma is born from a deep reverence for Ayurveda — the ancient science of life. Every bar is hand-crafted with time-honoured Vedic herbs and a nourishing Goat Milk Base, bringing centuries of wellness knowledge into your daily ritual.</p>
+        <ul class="story-pillars">
+          <li><span class="pillar-icon">🌿</span> <strong>100% Natural</strong> — No sulphates, no parabens</li>
+          <li><span class="pillar-icon">🤲</span> <strong>Handmade</strong> — Small-batch, artisanal craft</li>
+          <li><span class="pillar-icon">🌸</span> <strong>Herbal</strong> — Potent Vedic botanicals</li>
+          <li><span class="pillar-icon">🥛</span> <strong>Goat Milk Base</strong> — Deep nourishment for all skin types</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== PRODUCTS ======== -->
+  <section id="products" class="products section">
+    <div class="section-header fade-up">
+      <p class="section-eyebrow">Signature Collection</p>
+      <h2 class="section-title">Meet Your New<br /><em>Skincare Ritual</em></h2>
+    </div>
+    <div class="products-grid">
+
+      <!-- Round Soap Card -->
+      <article class="product-card glass-card fade-up" id="productRound">
+        <div class="product-card__badge">Bestseller</div>
+        <div class="product-card__img-wrap">
+          <img src="assets/hero-round.jpg" alt="Ayuroma Round Herbal Soap Bar" class="product-card__img" loading="lazy" />
+          <div class="product-card__img-glow"></div>
+        </div>
+        <div class="product-card__body">
+          <h3 class="product-card__name">Round Herbal Bar</h3>
+          <p class="product-card__tagline">The Classic Ayuroma Experience</p>
+          <div class="product-card__ingredients">
+            <span class="tag">Manjistha</span>
+            <span class="tag">Palash</span>
+            <span class="tag">Haldi</span>
+            <span class="tag">Rose Oil</span>
+          </div>
+          <p class="product-card__desc">A luxurious round bar that lathers into a creamy, skin-brightening foam. Manjistha purifies, Haldi glows, and Goat Milk deeply nourishes.</p>
+          <button class="btn btn--primary product-btn" id="btnRound">Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Square Soap Card -->
+      <article class="product-card glass-card fade-up delay-1" id="productSquare">
+        <div class="product-card__badge product-card__badge--new">New Shape</div>
+        <div class="product-card__img-wrap">
+          <img src="assets/hero-square.jpg" alt="Ayuroma Square Herbal Soap Bar" class="product-card__img" loading="lazy" />
+          <div class="product-card__img-glow"></div>
+        </div>
+        <div class="product-card__body">
+          <h3 class="product-card__name">Square Herbal Bar</h3>
+          <p class="product-card__tagline">Bold Form, Pure Soul</p>
+          <div class="product-card__ingredients">
+            <span class="tag">Mulethi</span>
+            <span class="tag">Palash</span>
+            <span class="tag">Goat Milk</span>
+            <span class="tag">Haldi</span>
+          </div>
+          <p class="product-card__desc">Sculpted for easy grip and a generous lather. Mulethi lightens dark spots, Palash tones, and the Goat Milk Base keeps skin silky-smooth.</p>
+          <button class="btn btn--primary product-btn" id="btnSquare">Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Label / Bundle Card -->
+      <article class="product-card glass-card fade-up delay-2" id="productBundle">
+        <div class="product-card__badge product-card__badge--gold">Value Pack</div>
+        <div class="product-card__img-wrap">
+          <img src="assets/label.jpg" alt="Ayuroma Combo Pack" class="product-card__img" loading="lazy" />
+          <div class="product-card__img-glow"></div>
+        </div>
+        <div class="product-card__body">
+          <h3 class="product-card__name">Herbal Combo Pack</h3>
+          <p class="product-card__tagline">Round + Square — Best Value</p>
+          <div class="product-card__ingredients">
+            <span class="tag">All 6 Herbs</span>
+            <span class="tag">2 Bars</span>
+            <span class="tag">Save 15%</span>
+          </div>
+          <p class="product-card__desc">Get both signature bars and experience the complete Ayuroma ritual — morning and night. Perfect as a gift or personal wellness upgrade.</p>
+          <button class="btn btn--primary product-btn" id="btnBundle">Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Aloe Vera Gel Card -->
+      <article class="product-card glass-card fade-up" id="productAloe">
+        <div class="product-card__badge product-card__badge--new" style="background:var(--gold); color:var(--brown);">New Arrival</div>
+        <div class="product-card__img-wrap">
+          <img src="assets/aloe-gel.jpg" alt="Ayuroma Aloe Vera Gel" class="product-card__img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1626015509747-c0e6e768e169?w=600&q=80'" />
+          <div class="product-card__img-glow"></div>
+        </div>
+        <div class="product-card__body">
+          <h3 class="product-card__name">Pure Aloe Vera Gel</h3>
+          <p class="product-card__tagline">Natural & Potent Hydration</p>
+          <div class="product-card__ingredients">
+            <span class="tag">Aloe Vera</span>
+            <span class="tag">Turmeric</span>
+            <span class="tag">Mint</span>
+          </div>
+          <p class="product-card__desc">A soothing, pure aloe vera gel enriched with Ayurvedic herbs. Deeply hydrates, calms irritated skin, and leaves a naturally radiant glow.</p>
+          <button class="btn btn--primary product-btn" id="btnAloe">Add to Cart</button>
+        </div>
+      </article>
+
+      <!-- Face Toner Card -->
+      <article class="product-card glass-card fade-up delay-1" id="productToner">
+        <div class="product-card__badge product-card__badge--new" style="background:var(--gold); color:var(--brown);">New Arrival</div>
+        <div class="product-card__img-wrap">
+          <img src="assets/face-toner.jpg" alt="Ayuroma Ayurvedic Face Toner" class="product-card__img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80'" />
+          <div class="product-card__img-glow"></div>
+        </div>
+        <div class="product-card__body">
+          <h3 class="product-card__name">Ayurvedic Face Toner</h3>
+          <p class="product-card__tagline">Refresh & Refine</p>
+          <div class="product-card__ingredients">
+            <span class="tag">Rose Water</span>
+            <span class="tag">Mulethi</span>
+            <span class="tag">Sandalwood</span>
+          </div>
+          <p class="product-card__desc">A revitalizing facial mist that balances your skin's pH and tightens pores. Infused with pure rose and licorice extract for an instant hydrating lift.</p>
+          <button class="btn btn--primary product-btn" id="btnToner">Add to Cart</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======== INGREDIENTS ======== -->
+  <section id="ingredients" class="ingredients-section section">
+    <div class="section-header fade-up">
+      <p class="section-eyebrow">Inside Every Bar</p>
+      <h2 class="section-title">Nature's Finest<br /><em>Ingredients</em></h2>
+    </div>
+    <div class="ingredients-grid">
+
+      <div class="ingredient-card glass-card fade-up" id="ing-manjistha">
+        <div class="ing-icon-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Simple_icon_plant.svg/512px-Simple_icon_plant.svg.png" alt="" class="ing-icon-placeholder" />
+          <span class="ing-emoji">🌿</span>
+        </div>
+        <h4 class="ing-name">Manjistha</h4>
+        <p class="ing-desc">A powerful Ayurvedic blood purifier that brightens complexion, reduces pigmentation and gives an even skin tone.</p>
+      </div>
+
+      <div class="ingredient-card glass-card fade-up delay-1" id="ing-palash">
+        <div class="ing-icon-wrap"><span class="ing-emoji">🌺</span></div>
+        <h4 class="ing-name">Palash</h4>
+        <p class="ing-desc">The "Flame of the Forest" — rich in antioxidants, it tightens pores, reduces inflammation and revives dull skin.</p>
+      </div>
+
+      <div class="ingredient-card glass-card fade-up delay-2" id="ing-mulethi">
+        <div class="ing-icon-wrap"><span class="ing-emoji">🪨</span></div>
+        <h4 class="ing-name">Mulethi</h4>
+        <p class="ing-desc">Licorice root that naturally lightens dark spots and hyperpigmentation while soothing sensitive and irritated skin.</p>
+      </div>
+
+      <div class="ingredient-card glass-card fade-up delay-3" id="ing-haldi">
+        <div class="ing-icon-wrap"><span class="ing-emoji">🌟</span></div>
+        <h4 class="ing-name">Haldi</h4>
+        <p class="ing-desc">Sacred turmeric with powerful anti-inflammatory and antibacterial properties — the secret to India's golden glow.</p>
+      </div>
+
+      <div class="ingredient-card glass-card fade-up delay-4" id="ing-rose">
+        <div class="ing-icon-wrap"><span class="ing-emoji">🌹</span></div>
+        <h4 class="ing-name">Rose Essential Oil</h4>
+        <p class="ing-desc">Precious rose essence hydrates deeply, reduces redness, and leaves skin with a delicate, long-lasting floral fragrance.</p>
+      </div>
+
+      <div class="ingredient-card glass-card fade-up delay-5" id="ing-goatmilk">
+        <div class="ing-icon-wrap"><span class="ing-emoji">🥛</span></div>
+        <h4 class="ing-name">Goat Milk Base</h4>
+        <p class="ing-desc">Rich in lactic acid and vitamins A, D, B6 &amp; B12 — gently exfoliates, nourishes and maintains the skin's natural pH.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======== SOURCING MAP ======== -->
+  <section id="sourcing" class="sourcing-section section fade-up">
+    <div class="section-header">
+      <p class="section-eyebrow">Our Roots</p>
+      <h2 class="section-title">Sourced Across<br /><em>India</em></h2>
+    </div>
+    <div class="map-container glass-card">
+      <img src="assets/india-map.png" alt="Map of India" class="map-bg" />
+      
+      <!-- Pin: Sandalwood (Mysore) -->
+      <div class="map-pin" style="top: 80%; left: 35%;" data-title="Sandalwood" data-region="Mysore, Karnataka" data-story="Sourced from the heart of Mysore, where generations of farmers have cultivated the world's most fragrant and pure sandalwood for centuries.">
+        <div class="pin-ring"></div>
+        <div class="pin-dot"></div>
+      </div>
+      
+      <!-- Pin: Rose (Kannauj) -->
+      <div class="map-pin" style="top: 35%; left: 45%;" data-title="Rose Essential Oil" data-region="Kannauj, Uttar Pradesh" data-story="Known as the perfume capital of India, Kannauj farmers hand-pick roses at dawn to distill the most potent and aromatic essential oils.">
+        <div class="pin-ring"></div>
+        <div class="pin-dot"></div>
+      </div>
+      
+      <!-- Pin: Haldi (Erode) -->
+      <div class="map-pin" style="top: 85%; left: 42%;" data-title="Haldi (Turmeric)" data-region="Erode, Tamil Nadu" data-story="Grown in the rich soils of Erode, this sacred turmeric has an exceptionally high curcumin content, providing a radiant golden glow.">
+        <div class="pin-ring"></div>
+        <div class="pin-dot"></div>
+      </div>
+
+      <!-- Pin: Mulethi (Punjab) -->
+      <div class="map-pin" style="top: 25%; left: 30%;" data-title="Mulethi (Licorice)" data-region="Northwest India" data-story="Harvested from the fertile plains of the Northwest, this sweet root has been used in Ayurveda for millennia to soothe and brighten skin.">
+        <div class="pin-ring"></div>
+        <div class="pin-dot"></div>
+      </div>
+
+      <!-- Tooltip Overlay -->
+      <div class="map-tooltip glass-card" id="mapTooltip">
+        <h4 class="tooltip-title">Ingredient Name</h4>
+        <p class="tooltip-region">Region Name</p>
+        <p class="tooltip-story">Story goes here...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TRANSFORMATION JOURNEY ======== -->
+  <section id="journey" class="journey-section">
+    <div class="journey-container">
+      <div class="journey-text">
+        <div class="journey-step" data-step="0">
+          <p class="section-eyebrow">Step 1</p>
+          <h2 class="section-title">The Harvest</h2>
+          <p class="journey-desc">We begin by hand-selecting the finest, sun-ripened turmeric roots, fresh red manjistha, and the most fragrant rose petals. Only the purest botanicals make the cut, honoring centuries of Ayurvedic tradition.</p>
+        </div>
+        <div class="journey-step" data-step="1">
+          <p class="section-eyebrow">Step 2</p>
+          <h2 class="section-title">Stone Grinding</h2>
+          <p class="journey-desc">Using the ancient <em>silbatta</em> (stone grinder), our artisans crush the raw herbs into a potent, nutrient-rich paste. This slow, cold-press method ensures no beneficial properties are lost to heat.</p>
+        </div>
+        <div class="journey-step" data-step="2">
+          <p class="section-eyebrow">Step 3</p>
+          <h2 class="section-title">The Final Creation</h2>
+          <p class="journey-desc">The potent herbal paste is gently folded into our luxurious goat milk base and poured into molds. After curing, it becomes the Ayuroma bar—a pure, golden block of skincare perfection.</p>
+        </div>
+      </div>
+      <div class="journey-visual">
+        <div class="journey-sticky">
+          <img src="assets/journey-raw.jpg" alt="Raw Ingredients" class="journey-img active" id="journeyImg0" />
+          <img src="assets/journey-grind.jpg" alt="Stone Grinding" class="journey-img" id="journeyImg1" />
+          <img src="assets/journey-final.jpg" alt="Final Soap" class="journey-img" id="journeyImg2" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== BENEFITS BANNER ======== -->
+  <section class="benefits-banner fade-up">
+    <div class="benefits-banner__inner glass-card">
+      <div class="benefit-item">
+        <span class="benefit-num">100%</span>
+        <span class="benefit-label">Natural Ingredients</span>
+      </div>
+      <div class="benefit-divider"></div>
+      <div class="benefit-item">
+        <span class="benefit-num">0</span>
+        <span class="benefit-label">Harmful Chemicals</span>
+      </div>
+      <div class="benefit-divider"></div>
+      <div class="benefit-item">
+        <span class="benefit-num">6+</span>
+        <span class="benefit-label">Vedic Botanicals</span>
+      </div>
+      <div class="benefit-divider"></div>
+      <div class="benefit-item">
+        <span class="benefit-num">∞</span>
+        <span class="benefit-label">Ancient Wisdom</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CONTACT ======== -->
+  <section id="contact" class="contact section">
+    <div class="section-header fade-up">
+      <p class="section-eyebrow">Get In Touch</p>
+      <h2 class="section-title">Start Your<br /><em>Skin Journey</em></h2>
+    </div>
+    <div class="contact-inner glass-card fade-up">
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell us how we can help you…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary" id="contactSubmitBtn">Send Message ✦</button>
+        <p class="form-success" id="formSuccess">Thank you! We'll be in touch soon. 🌿</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="Ayuroma Logo" class="footer-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <div class="fallback-logo" style="display: none;">
+          <span class="logo-text" style="color:var(--cream); background:none; -webkit-text-fill-color:initial;">AYUROMA</span><span class="logo-reg" style="color:var(--gold-light); background:none; -webkit-text-fill-color:initial;">®</span>
+        </div>
+        <p>Pure Herbal Luxury</p>
+      </div>
+      <p class="footer-copy">© 2026 Ayuroma. All rights reserved. Crafted with 🌿 and love.</p>
+    </div>
+  </footer>
+
+  <!-- ======== CART TOAST ======== -->
+  <div class="cart-toast" id="cartToast">
+    <span>✦</span> Added to cart!
+  </div>
+
+  <!-- ======== FLOATING CART ======== -->
+  <div class="floating-cart" id="floatingCart">
+    <button class="btn btn--primary cart-checkout-btn" id="openCartModalBtn" style="display: flex; align-items: center; gap: 0.5rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 1.2rem; height: 1.2rem; fill: currentColor;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 411.9c-31.5 0-62.4-8.5-89.6-24.5l-6.4-3.8-66.6 17.5 17.8-64.9-4.2-6.7c-17.6-28-26.9-60.5-26.9-93.6 0-101.4 82.5-184 184-184 54.1 0 105 21.1 143.3 59.4 38.3 38.3 59.4 89.2 59.4 143.3 0 101.4-82.5 184-184 184zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-1.5-2.6 0-4.1 1.4-5.5 1.3-1.3 2.8-3.2 4.2-4.6 1.4-1.4 1.9-2.3 2.8-3.7.9-1.4.5-2.8 0-4.2-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+      Buy (<span id="cartCount">0</span> items)
+    </button>
+  </div>
+
+  <!-- ======== CART MODAL ======== -->
+  <div class="cart-modal-overlay" id="cartModal">
+    <div class="cart-modal-content glass-card">
+      <button class="cart-modal-close" id="cartModalClose">&times;</button>
+      <h3 class="cart-modal-title">Your Cart</h3>
+      <div class="cart-items-list" id="cartItemsList">
+        <!-- Items injected via JS -->
+      </div>
+      <form class="cart-checkout-form" id="cartCheckoutForm">
+        <h4 class="form-section-title">Delivery Details</h4>
+        <div class="form-group">
+          <label for="customerName">Full Name *</label>
+          <input type="text" id="customerName" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="customerPhone">Phone Number *</label>
+          <input type="tel" id="customerPhone" placeholder="Your phone number" required>
+        </div>
+        <div class="form-group">
+          <label for="customerAddress">Full Address *</label>
+          <textarea id="customerAddress" rows="3" placeholder="Your full delivery address" required></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary cart-submit-btn">Send Order via WhatsApp ✦</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script-premium.js?v=4"></script>
+</body>
+</html>
