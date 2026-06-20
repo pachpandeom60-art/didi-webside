@@ -4,37 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ─── CUSTOM CURSOR & TRAIL ─── */
-  const cursor = document.getElementById('cursorGlow');
-  const cursorTrail = document.getElementById('cursorTrail');
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
-  let trailX = mouseX;
-  let trailY = mouseY;
 
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
-  });
-
-  function animateCursor() {
-    trailX += (mouseX - trailX) * 0.15;
-    trailY += (mouseY - trailY) * 0.15;
-    if (cursorTrail) {
-      cursorTrail.style.left = trailX + 'px';
-      cursorTrail.style.top = trailY + 'px';
-    }
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-
-
-  document.querySelectorAll('a, button, .product-card, .ingredient-card').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-  });
 
   /* ─── THEME TOGGLE ─── */
   const themeToggle = document.getElementById('themeToggle');
@@ -53,18 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ─── MAGNETIC BUTTONS ─── */
-  document.querySelectorAll('.btn--primary').forEach(btn => {
-    btn.addEventListener('mousemove', e => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.transform = `translate(0px, 0px)`;
-    });
-  });
+
 
   /* ─── FLOATING PETALS ─── */
   const petalContainer = document.getElementById('petalsContainer');
@@ -198,19 +157,53 @@ document.addEventListener('DOMContentLoaded', () => {
       const count = cart.filter(item => item.name === fullName).length;
       
       if (count > 0) {
-        btn.textContent = `✓ Added (${count})`;
+        btn.innerHTML = `<span class="qty-minus" style="flex:1; display:flex; justify-content:center; align-items:center; padding:0.6rem 0; cursor:pointer; font-size:1.5rem; font-weight:bold; line-height:1; user-select:none;">−</span> <span style="font-weight:bold; user-select:none; font-size:1.2rem; min-width:40px; text-align:center; display:flex; justify-content:center; align-items:center;">${count}</span> <span class="qty-plus" style="flex:1; display:flex; justify-content:center; align-items:center; padding:0.6rem 0; cursor:pointer; font-size:1.5rem; font-weight:bold; line-height:1; user-select:none;">+</span>`;
         btn.style.background = 'var(--green)';
         btn.style.borderColor = 'var(--green)';
+        btn.style.display = 'flex';
+        btn.style.justifyContent = 'center';
+        btn.style.alignItems = 'stretch';
+        btn.style.padding = '0'; // thinner padding for flex items
+        btn.classList.add('is-qty-mode');
       } else {
         btn.textContent = 'Add to Cart';
         btn.style.background = '';
         btn.style.borderColor = '';
+        btn.style.display = 'inline-block';
+        btn.style.padding = '0.8rem 2rem';
+        btn.classList.remove('is-qty-mode');
       }
     });
   }
 
   document.querySelectorAll('.product-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      const card = btn.closest('.product-card');
+      const name = card.querySelector('.product-card__name').textContent;
+      const taglineEl = card.querySelector('.product-card__tagline');
+      const fullName = taglineEl ? `${name} - ${taglineEl.textContent}` : name;
+      const priceText = card.querySelector('.price-current').textContent;
+      const priceNum = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+
+      // If button is in quantity selector mode
+      if (btn.classList.contains('is-qty-mode')) {
+        if (e.target.classList.contains('qty-minus')) {
+          const idx = cart.findIndex(item => item.name === fullName);
+          if (idx > -1) {
+            cart.splice(idx, 1);
+            updateCartUI();
+            if (cartModal.classList.contains('open')) updateCartModalUI();
+          }
+        } else if (e.target.classList.contains('qty-plus')) {
+          cart.push({ name: fullName, price: priceNum, shortName: name });
+          updateCartUI();
+          if (cartModal.classList.contains('open')) updateCartModalUI();
+        }
+        // If they click the background or the number, do nothing
+        return;
+      }
+
+      // Normal Add to Cart (only if it wasn't plus or minus)
       // Confetti burst
       const rect = btn.getBoundingClientRect();
       const originX = rect.left + rect.width / 2;
@@ -231,16 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => particle.remove(), 800);
       }
       
-      const card = btn.closest('.product-card');
-      const name = card.querySelector('.product-card__name').textContent;
-      const taglineEl = card.querySelector('.product-card__tagline');
-      const fullName = taglineEl ? `${name} - ${taglineEl.textContent}` : name;
-      
-      const priceText = card.querySelector('.price-current').textContent;
-      const priceNum = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
-
       cart.push({ name: fullName, price: priceNum, shortName: name });
       updateCartUI();
+      if (cartModal.classList.contains('open')) updateCartModalUI();
       showToast(`✦ ${name} added to cart!`);
     });
   });
