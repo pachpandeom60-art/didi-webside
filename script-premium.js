@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
+
+
   document.querySelectorAll('a, button, .product-card, .ingredient-card').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
@@ -38,22 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = themeToggle ? themeToggle.querySelector('.theme-toggle-icon') : null;
   
-  const currentTheme = localStorage.getItem('theme') || 'light';
-  if (currentTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    if (themeIcon) themeIcon.textContent = '☀️';
-  }
-
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       if (isDark) {
         document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
         if (themeIcon) themeIcon.textContent = '🌙';
       } else {
         document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
         if (themeIcon) themeIcon.textContent = '☀️';
       }
     });
@@ -103,14 +97,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   /* ─── MOBILE NAV ─── */
-  const navToggle = document.getElementById('navToggle');
-  const navLinks  = document.getElementById('navLinks');
-  navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => navLinks.classList.remove('open'));
-  });
+  const navToggleBtn = document.getElementById('navToggle');
+  const navLinksMenu  = document.getElementById('navLinks');
+  if (navToggleBtn && navLinksMenu) {
+    navToggleBtn.addEventListener('click', () => {
+      navLinksMenu.classList.toggle('open');
+      navToggleBtn.classList.toggle('active');
+    });
+    navLinksMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinksMenu.classList.remove('open');
+        navToggleBtn.classList.remove('active');
+      });
+    });
+  }
 
   /* ─── SCROLL EFFECTS & MARQUEE ─── */
   const revealTargets = document.querySelectorAll('.fade-up, .fade-left, .fade-right');
@@ -171,6 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartCheckoutForm = document.getElementById('cartCheckoutForm');
   const cartToast = document.getElementById('cartToast');
   const openCartModalBtn = document.getElementById('openCartModalBtn');
+  const navCartBtn = document.getElementById('navCartBtn');
+  const navCartCount = document.getElementById('navCartCount');
   
   function showToast(msg = '✦ Added to cart!') {
     cartToast.textContent = msg;
@@ -180,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateCartUI() {
     if (cartCountEl) cartCountEl.textContent = cart.length;
+    if (navCartCount) navCartCount.textContent = cart.length;
     if (cart.length > 0) {
         floatingCart.classList.add('visible');
     } else {
@@ -190,7 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = btn.closest('.product-card');
       if (!card) return;
       const name = card.querySelector('.product-card__name').textContent;
-      const count = cart.filter(item => item === name).length;
+      const taglineEl = card.querySelector('.product-card__tagline');
+      const fullName = taglineEl ? `${name} - ${taglineEl.textContent}` : name;
+      const count = cart.filter(item => item.name === fullName).length;
       
       if (count > 0) {
         btn.textContent = `✓ Added (${count})`;
@@ -226,8 +231,15 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => particle.remove(), 800);
       }
       
-      const name = btn.closest('.product-card').querySelector('.product-card__name').textContent;
-      cart.push(name);
+      const card = btn.closest('.product-card');
+      const name = card.querySelector('.product-card__name').textContent;
+      const taglineEl = card.querySelector('.product-card__tagline');
+      const fullName = taglineEl ? `${name} - ${taglineEl.textContent}` : name;
+      
+      const priceText = card.querySelector('.price-current').textContent;
+      const priceNum = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+
+      cart.push({ name: fullName, price: priceNum, shortName: name });
       updateCartUI();
       showToast(`✦ ${name} added to cart!`);
     });
@@ -236,18 +248,33 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateCartModalUI() {
     cartItemsList.innerHTML = '';
     const itemCounts = {};
-    cart.forEach(item => itemCounts[item] = (itemCounts[item] || 0) + 1);
+    let total = 0;
+    cart.forEach(item => {
+      if (!itemCounts[item.name]) itemCounts[item.name] = { count: 0, price: item.price };
+      itemCounts[item.name].count += 1;
+      total += item.price;
+    });
     
     if (Object.keys(itemCounts).length === 0) {
       cartItemsList.innerHTML = '<p style="color:var(--text-muted);">Your cart is empty. Please add some items to proceed.</p>';
       cartCheckoutForm.classList.remove('visible');
     } else {
-      for (const [item, count] of Object.entries(itemCounts)) {
+      for (const [name, data] of Object.entries(itemCounts)) {
         const row = document.createElement('div');
         row.className = 'cart-item-row';
-        row.innerHTML = `<span>${item}</span> <span>x${count}</span>`;
+        row.innerHTML = `<span>${name}</span> <span style="white-space:nowrap;">${data.price} Rs. &times; ${data.count}</span>`;
         cartItemsList.appendChild(row);
       }
+      const totalRow = document.createElement('div');
+      totalRow.className = 'cart-item-row';
+      totalRow.style.marginTop = '1rem';
+      totalRow.style.paddingTop = '1rem';
+      totalRow.style.borderTop = '1px solid var(--gold)';
+      totalRow.style.borderBottom = 'none';
+      totalRow.style.fontSize = '1.2rem';
+      totalRow.innerHTML = `<strong>Total</strong> <strong>${total} Rs.</strong>`;
+      cartItemsList.appendChild(totalRow);
+
       cartCheckoutForm.classList.add('visible');
     }
   }
@@ -268,12 +295,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const address = document.getElementById('customerAddress').value;
       
       const itemCounts = {};
-      cart.forEach(item => itemCounts[item] = (itemCounts[item] || 0) + 1);
+      let total = 0;
+      cart.forEach(item => {
+        if (!itemCounts[item.name]) itemCounts[item.name] = { count: 0, price: item.price };
+        itemCounts[item.name].count += 1;
+        total += item.price;
+      });
       
       let itemsText = '';
-      for (const [item, count] of Object.entries(itemCounts)) {
-        itemsText += `%0A- ${item} (x${count})`;
+      for (const [name, data] of Object.entries(itemCounts)) {
+        itemsText += `%0A- ${name} (x${data.count}) = ${data.price * data.count} Rs.`;
       }
+      itemsText += `%0A%0ATotal: ${total} Rs.`;
       
       const message = `Hello Ayuroma, I would like to place an order:%0A%0AName: ${name}%0APhone: ${phone}%0AAddress: ${address}%0A%0AItems:${itemsText}`;
       const url = `https://wa.me/${whatsappNumber}?text=${message}`;
@@ -319,12 +352,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (openCartModalBtn) {
-    openCartModalBtn.addEventListener('click', () => {
-      updateCartModalUI();
-      cartModal.classList.add('open');
-    });
+  function openCartModal() {
+    cartModal.classList.add('open');
+    updateCartModalUI();
   }
+
+  if (openCartModalBtn) openCartModalBtn.addEventListener('click', openCartModal);
+  if (navCartBtn) navCartBtn.addEventListener('click', openCartModal);
 
   if (cartModalClose) {
     cartModalClose.addEventListener('click', () => {

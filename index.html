@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ayuroma® | Pure Herbal Luxury – Ayurvedic Soap</title>
-  <meta name="description" content="Ayuroma Ayurvedic Soap – crafted with Manjistha, Palash, Mulethi, Haldi, Rose Essential Oil and Goat Milk Base. 100% Natural, Handmade & Herbal for radiant and healthy skin." />
+  <meta name="description" content="Ayuroma Ayurvedic Soap – crafted with Manjistha, Palash, Mulethi, Haldi, Rose Essential Oil and Goat Milk Base. Naturally Derived, Handmade & Herbal for radiant and healthy skin." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style-premium.css?v=4" />
+  <link rel="stylesheet" href="style-premium.css?v=22" />
 </head>
 <body>
 
@@ -36,6 +36,9 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
+      <button class="nav-cart-btn" id="navCartBtn" aria-label="View Cart">
+        🛒 <span class="nav-cart-count" id="navCartCount">0</span>
+      </button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
         <span class="theme-toggle-icon">🌙</span>
       </button>
@@ -106,7 +109,7 @@
         <h2 class="section-title">Ancient Wisdom,<br /><em>Modern Luxury</em></h2>
         <p class="story-body">Ayuroma is born from a deep reverence for Ayurveda — the ancient science of life. Every bar is hand-crafted with time-honoured Vedic herbs and a nourishing Goat Milk Base, bringing centuries of wellness knowledge into your daily ritual.</p>
         <ul class="story-pillars">
-          <li><span class="pillar-icon">🌿</span> <strong>100% Natural</strong> — No sulphates, no parabens</li>
+          <li><span class="pillar-icon">🌿</span> <strong>Naturally Derived</strong> — Free from parabens, sulphates, and phthalates</li>
           <li><span class="pillar-icon">🤲</span> <strong>Handmade</strong> — Small-batch, artisanal craft</li>
           <li><span class="pillar-icon">🌸</span> <strong>Herbal</strong> — Potent Vedic botanicals</li>
           <li><span class="pillar-icon">🥛</span> <strong>Goat Milk Base</strong> — Deep nourishment for all skin types</li>
@@ -131,15 +134,20 @@
           <div class="product-card__img-glow"></div>
         </div>
         <div class="product-card__body">
-          <h3 class="product-card__name">Round Herbal Bar</h3>
-          <p class="product-card__tagline">The Classic Ayuroma Experience</p>
+          <h3 class="product-card__name">Ayuroma Kanti Bar</h3>
+          <div class="product-card__price">
+            <span class="price-current">69 Rs.</span>
+            <span class="price-old">99 Rs.</span>
+          </div>
+          <p class="product-card__tagline">Round Shape</p>
           <div class="product-card__ingredients">
-            <span class="tag">Manjistha</span>
+            <span class="tag">Manjishtha</span>
+            <span class="tag">Mulethi</span>
             <span class="tag">Palash</span>
             <span class="tag">Haldi</span>
-            <span class="tag">Rose Oil</span>
+            <span class="tag">Goat Milk</span>
           </div>
-          <p class="product-card__desc">A luxurious round bar that lathers into a creamy, skin-brightening foam. Manjistha purifies, Haldi glows, and Goat Milk deeply nourishes.</p>
+          <p class="product-card__desc">Also contains: Rose powder, Rose essential oil, and Goat milk soap base. A luxurious round bar that lathers into a creamy, skin-brightening foam.</p>
           <button class="btn btn--primary product-btn" id="btnRound">Add to Cart</button>
         </div>
       </article>
@@ -152,15 +160,20 @@
           <div class="product-card__img-glow"></div>
         </div>
         <div class="product-card__body">
-          <h3 class="product-card__name">Square Herbal Bar</h3>
-          <p class="product-card__tagline">Bold Form, Pure Soul</p>
+          <h3 class="product-card__name">Ayuroma Kanti Bar</h3>
+          <div class="product-card__price">
+            <span class="price-current">69 Rs.</span>
+            <span class="price-old">99 Rs.</span>
+          </div>
+          <p class="product-card__tagline">Square Shape</p>
           <div class="product-card__ingredients">
+            <span class="tag">Manjishtha</span>
             <span class="tag">Mulethi</span>
             <span class="tag">Palash</span>
-            <span class="tag">Goat Milk</span>
             <span class="tag">Haldi</span>
+            <span class="tag">Goat Milk</span>
           </div>
-          <p class="product-card__desc">Sculpted for easy grip and a generous lather. Mulethi lightens dark spots, Palash tones, and the Goat Milk Base keeps skin silky-smooth.</p>
+          <p class="product-card__desc">Also contains: Rose powder, Rose essential oil, and Goat milk soap base. Sculpted for easy grip and a generous lather.</p>
           <button class="btn btn--primary product-btn" id="btnSquare">Add to Cart</button>
         </div>
       </article>
@@ -169,18 +182,22 @@
       <article class="product-card glass-card fade-up delay-2" id="productBundle">
         <div class="product-card__badge product-card__badge--gold">Value Pack</div>
         <div class="product-card__img-wrap">
-          <img src="assets/label.jpg" alt="Ayuroma Combo Pack" class="product-card__img" loading="lazy" />
+          <img src="assets/glow-box.jpg" alt="Ayuroma Combo Pack" class="product-card__img" loading="lazy" />
           <div class="product-card__img-glow"></div>
         </div>
         <div class="product-card__body">
-          <h3 class="product-card__name">Herbal Combo Pack</h3>
-          <p class="product-card__tagline">Round + Square — Best Value</p>
-          <div class="product-card__ingredients">
-            <span class="tag">All 6 Herbs</span>
-            <span class="tag">2 Bars</span>
-            <span class="tag">Save 15%</span>
+          <h3 class="product-card__name">The Holistic Glow Box</h3>
+          <div class="product-card__price">
+            <span class="price-current">299 Rs.</span>
+            <span class="price-old">447 Rs.</span>
           </div>
-          <p class="product-card__desc">Get both signature bars and experience the complete Ayuroma ritual — morning and night. Perfect as a gift or personal wellness upgrade.</p>
+          <p class="product-card__tagline">Combo Pack</p>
+          <div class="product-card__ingredients">
+            <span class="tag">Kanti Bar</span>
+            <span class="tag">Glow Mist</span>
+            <span class="tag">Aloe Gel</span>
+          </div>
+          <p class="product-card__desc">Includes Ayuroma Kanti Bar (99 Rs), Ayuroma Kanti Glow Mist (199 Rs), and Aloevera Gel (149 Rs). Perfect as a gift or wellness upgrade.</p>
           <button class="btn btn--primary product-btn" id="btnBundle">Add to Cart</button>
         </div>
       </article>
@@ -193,14 +210,17 @@
           <div class="product-card__img-glow"></div>
         </div>
         <div class="product-card__body">
-          <h3 class="product-card__name">Pure Aloe Vera Gel</h3>
+          <h3 class="product-card__name">Aloevera Gel (50g)</h3>
+          <div class="product-card__price">
+            <span class="price-current">99 Rs.</span>
+            <span class="price-old">149 Rs.</span>
+          </div>
           <p class="product-card__tagline">Natural & Potent Hydration</p>
           <div class="product-card__ingredients">
-            <span class="tag">Aloe Vera</span>
-            <span class="tag">Turmeric</span>
-            <span class="tag">Mint</span>
+            <span class="tag">Aloevera Swaras</span>
+            <span class="tag">Veg. Glycerine</span>
           </div>
-          <p class="product-card__desc">A soothing, pure aloe vera gel enriched with Ayurvedic herbs. Deeply hydrates, calms irritated skin, and leaves a naturally radiant glow.</p>
+          <p class="product-card__desc">Also contains: Picchal Ghantva Shar Dravya, Santilan Dravya, and pure Aloevera fragrance. Deeply hydrates and leaves a naturally radiant glow.</p>
           <button class="btn btn--primary product-btn" id="btnAloe">Add to Cart</button>
         </div>
       </article>
@@ -209,18 +229,23 @@
       <article class="product-card glass-card fade-up delay-1" id="productToner">
         <div class="product-card__badge product-card__badge--new" style="background:var(--gold); color:var(--brown);">New Arrival</div>
         <div class="product-card__img-wrap">
-          <img src="assets/face-toner.jpg" alt="Ayuroma Ayurvedic Face Toner" class="product-card__img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80'" />
+          <img src="assets/face-toner.png" alt="Ayuroma Ayurvedic Face Toner" class="product-card__img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80'" />
           <div class="product-card__img-glow"></div>
         </div>
         <div class="product-card__body">
-          <h3 class="product-card__name">Ayurvedic Face Toner</h3>
+          <h3 class="product-card__name">Ayuroma Kanti Glow Mist</h3>
+          <div class="product-card__price">
+            <span class="price-current">149 Rs.</span>
+            <span class="price-old">199 Rs.</span>
+          </div>
           <p class="product-card__tagline">Refresh & Refine</p>
           <div class="product-card__ingredients">
-            <span class="tag">Rose Water</span>
+            <span class="tag">Rose Hydrosol</span>
+            <span class="tag">Manjishtha</span>
+            <span class="tag">Lodhra</span>
             <span class="tag">Mulethi</span>
-            <span class="tag">Sandalwood</span>
           </div>
-          <p class="product-card__desc">A revitalizing facial mist that balances your skin's pH and tightens pores. Infused with pure rose and licorice extract for an instant hydrating lift.</p>
+          <p class="product-card__desc">With Daruhaldi, Sariva, and Rose petal. Pigmentation lightening, blood purifier, dark spots & tanning control, natural skin brightener with cooling glow.</p>
           <button class="btn btn--primary product-btn" id="btnToner">Add to Cart</button>
         </div>
       </article>
@@ -320,35 +345,7 @@
     </div>
   </section>
 
-  <!-- ======== TRANSFORMATION JOURNEY ======== -->
-  <section id="journey" class="journey-section">
-    <div class="journey-container">
-      <div class="journey-text">
-        <div class="journey-step" data-step="0">
-          <p class="section-eyebrow">Step 1</p>
-          <h2 class="section-title">The Harvest</h2>
-          <p class="journey-desc">We begin by hand-selecting the finest, sun-ripened turmeric roots, fresh red manjistha, and the most fragrant rose petals. Only the purest botanicals make the cut, honoring centuries of Ayurvedic tradition.</p>
-        </div>
-        <div class="journey-step" data-step="1">
-          <p class="section-eyebrow">Step 2</p>
-          <h2 class="section-title">Stone Grinding</h2>
-          <p class="journey-desc">Using the ancient <em>silbatta</em> (stone grinder), our artisans crush the raw herbs into a potent, nutrient-rich paste. This slow, cold-press method ensures no beneficial properties are lost to heat.</p>
-        </div>
-        <div class="journey-step" data-step="2">
-          <p class="section-eyebrow">Step 3</p>
-          <h2 class="section-title">The Final Creation</h2>
-          <p class="journey-desc">The potent herbal paste is gently folded into our luxurious goat milk base and poured into molds. After curing, it becomes the Ayuroma bar—a pure, golden block of skincare perfection.</p>
-        </div>
-      </div>
-      <div class="journey-visual">
-        <div class="journey-sticky">
-          <img src="assets/journey-raw.jpg" alt="Raw Ingredients" class="journey-img active" id="journeyImg0" />
-          <img src="assets/journey-grind.jpg" alt="Stone Grinding" class="journey-img" id="journeyImg1" />
-          <img src="assets/journey-final.jpg" alt="Final Soap" class="journey-img" id="journeyImg2" />
-        </div>
-      </div>
-    </div>
-  </section>
+
 
   <!-- ======== BENEFITS BANNER ======== -->
   <section class="benefits-banner fade-up">
@@ -371,6 +368,59 @@
       <div class="benefit-item">
         <span class="benefit-num">∞</span>
         <span class="benefit-label">Ancient Wisdom</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FEATURED BLOG ======== -->
+  <section id="blog" class="featured-blog section">
+    <div class="featured-blog-inner glass-card">
+      <header class="blog-header">
+        <p class="section-eyebrow">Featured Journal</p>
+        <h2 class="blog-title">Ayuroma Herbal Face Toner:<br /><em>A Natural Way to Brighter, Healthier Skin</em></h2>
+      </header>
+
+      <div class="blog-body">
+        <p class="lead">In today's world, our skin is constantly exposed to pollution, harsh chemicals, and environmental stress. These factors can lead to dark spots, uneven skin tone, dullness, and loss of firmness. 🌿</p>
+        
+        <p>The Ayuroma Herbal Extract-Based Face Toner is crafted with traditional Ayurvedic herbs to help nourish, brighten, and refresh your skin naturally. Unlike alcohol-based toners that can strip away moisture, this herbal formula works gently to support healthy, radiant skin.</p>
+
+        <h3>Key Herbal Ingredients</h3>
+        <div class="herb-grid">
+          <div class="herb-item"><strong>Manjishtha</strong> – Helps reduce dark spots and promotes a more even complexion.</div>
+          <div class="herb-item"><strong>Mulethi (Licorice Root)</strong> – Known for its natural skin-brightening properties.</div>
+          <div class="herb-item"><strong>Daruhaldi (Tree Turmeric)</strong> – Supports clearer skin and helps reduce the appearance of acne marks.</div>
+          <div class="herb-item"><strong>Saariva</strong> – Soothes and cools the skin while helping maintain balance.</div>
+          <div class="herb-item"><strong>Lodhra</strong> – Traditionally used to improve skin firmness and refine texture.</div>
+          <div class="herb-item"><strong>Rose Hydrosol</strong> – Hydrates, refreshes, and helps maintain the skin's natural pH.</div>
+        </div>
+
+        <h3>Benefits of Ayuroma Herbal Face Toner</h3>
+        <ul class="benefits-list">
+          <li>✅ Helps reduce the appearance of dark spots and blemishes</li>
+          <li>✅ Brightens dull and tired-looking skin</li>
+          <li>✅ Supports firmer, smoother-looking skin</li>
+          <li>✅ Soothes redness and promotes a refreshed complexion</li>
+          <li>✅ Provides lightweight hydration throughout the day</li>
+        </ul>
+
+        <h3>How to Use</h3>
+        <ol class="usage-list">
+          <li>Cleanse your face thoroughly.</li>
+          <li>Spray the toner evenly on your face and neck.</li>
+          <li>Gently pat into the skin until absorbed.</li>
+          <li>Follow with your favorite serum or moisturizer.</li>
+        </ol>
+        <p style="margin-top: 1rem;"><em>For best results, use twice daily, morning and evening.</em></p>
+
+        <h3>Final Thoughts</h3>
+        <p>If you're looking for a gentle, plant-based addition to your skincare routine, Ayuroma Herbal Face Toner offers the goodness of traditional Ayurvedic ingredients in a refreshing daily mist. With regular use, it can help your skin feel refreshed, balanced, and naturally radiant. ✨</p>
+        
+        <p class="signature">Healthy skin starts with nature. Experience the Ayuroma glow today! 🌹🍃</p>
+        
+        <div class="blog-action" style="margin-top: 3rem; text-align: center;">
+           <button class="btn btn--primary" onclick="document.getElementById('btnToner').scrollIntoView({behavior: 'smooth'})">Shop The Glow Mist ✦</button>
+        </div>
       </div>
     </div>
   </section>
@@ -457,6 +507,6 @@
     </div>
   </div>
 
-  <script src="script-premium.js?v=4"></script>
+  <script src="script-premium.js?v=22"></script>
 </body>
 </html>
