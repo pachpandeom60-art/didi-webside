@@ -304,12 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
       let itemsText = '';
       for (const [name, data] of Object.entries(itemCounts)) {
-        itemsText += `%0A- ${name} (x${data.count}) = ${data.price * data.count} Rs.`;
+        itemsText += `\n- ${name} (x${data.count}) = ${data.price * data.count} Rs.`;
       }
-      itemsText += `%0A%0ATotal: ${total} Rs.`;
+      itemsText += `\n\nTotal: ${total} Rs.`;
       
-      const message = `Hello Ayuroma, I would like to place an order:%0A%0AName: ${name}%0APhone: ${phone}%0AAddress: ${address}%0A%0AItems:${itemsText}`;
-      const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+      const message = `Hello Ayuroma, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\nItems:${itemsText}`;
+      const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank');
       
       // Optionally clear cart after redirect
