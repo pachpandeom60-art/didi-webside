@@ -251,14 +251,23 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `<span>${name}</span> <span style="white-space:nowrap;">${data.price} Rs. &times; ${data.count}</span>`;
         cartItemsList.appendChild(row);
       }
+      const deliveryRow = document.createElement('div');
+      deliveryRow.className = 'cart-item-row';
+      deliveryRow.style.marginTop = '0.5rem';
+      deliveryRow.style.paddingTop = '0.5rem';
+      deliveryRow.style.borderTop = '1px dashed var(--gold)';
+      deliveryRow.style.fontSize = '0.95rem';
+      deliveryRow.innerHTML = `<span>Delivery Charge</span> <span style="white-space:nowrap;">50 Rs.</span>`;
+      cartItemsList.appendChild(deliveryRow);
+
       const totalRow = document.createElement('div');
       totalRow.className = 'cart-item-row';
-      totalRow.style.marginTop = '1rem';
-      totalRow.style.paddingTop = '1rem';
+      totalRow.style.marginTop = '0.5rem';
+      totalRow.style.paddingTop = '0.5rem';
       totalRow.style.borderTop = '1px solid var(--gold)';
       totalRow.style.borderBottom = 'none';
       totalRow.style.fontSize = '1.2rem';
-      totalRow.innerHTML = `<strong>Total</strong> <strong>${total} Rs.</strong>`;
+      totalRow.innerHTML = `<strong>Total</strong> <strong>${total + 50} Rs.</strong>`;
       cartItemsList.appendChild(totalRow);
 
       cartCheckoutForm.classList.add('visible');
@@ -292,14 +301,18 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const [name, data] of Object.entries(itemCounts)) {
         itemsText += `\n- ${name} (x${data.count}) = ${data.price * data.count} Rs.`;
       }
-      itemsText += `\n\nTotal: ${total} Rs.`;
+      itemsText += `\n\nDelivery Charge: 50 Rs.`;
+      itemsText += `\nTotal: ${total + 50} Rs.`;
       
       const message = `Hello Ayuroma, I would like to place an order:\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\nItems:${itemsText}`;
       const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank');
       
-      // Optionally clear cart after redirect
-      // cart = []; updateCartUI(); cartModal.classList.remove('open');
+      // Clear cart after redirect
+      cart = [];
+      updateCartUI();
+      cartModal.classList.remove('open');
+      cartCheckoutForm.reset();
     });
   }
 
@@ -352,32 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (cartCheckoutForm) {
-    cartCheckoutForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById('customerName').value;
-      const phone = document.getElementById('customerPhone').value;
-      const address = document.getElementById('customerAddress').value;
-      
-      const itemCounts = {};
-      cart.forEach(item => itemCounts[item] = (itemCounts[item] || 0) + 1);
-      
-      let orderText = `Hello Ayuroma! I would like to place an order.\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\n*Order Details:*\n`;
-      for (const [item, count] of Object.entries(itemCounts)) {
-        orderText += `- ${count}x ${item}\n`;
-      }
-      orderText += "\nPlease let me know the total amount and payment options. Thank you!";
-      
-      const encodedText = encodeURIComponent(orderText);
-      window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
-      
-      cartModal.classList.remove('open');
-      cart = [];
-      updateCartUI();
-      cartCheckoutForm.reset();
-    });
-  }
+
 
   /* ─── CONTACT FORM TO WHATSAPP ─── */
   const form = document.getElementById('contactForm');
