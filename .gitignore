@@ -1,5 +1,4 @@
 # Environment & credentials
-review-config.js
 .env
 .env.local
 .env.*.local
