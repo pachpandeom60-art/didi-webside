@@ -388,6 +388,198 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ─── GOOGLE-SIGNED-IN REVIEWS (SUPABASE) ─── */
+  const reviewConfig = window.AYUROMA_REVIEWS_CONFIG;
+  const reviewsList = document.getElementById('reviewsList');
+  const reviewsCount = document.getElementById('reviewsCount');
+  const reviewsAccountCopy = document.getElementById('reviewsAccountCopy');
+  const googleSignInBtn = document.getElementById('googleSignInBtn');
+  const reviewSignOutBtn = document.getElementById('reviewSignOutBtn');
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewSignedInAs = document.getElementById('reviewSignedInAs');
+  const reviewFeedback = document.getElementById('reviewFeedback');
+  const reviewSubmitBtn = document.getElementById('reviewSubmitBtn');
+  let reviewUser = null;
+  let reviewsClient = null;
+
+  const reviewsAreConfigured = Boolean(
+    reviewConfig && reviewConfig.supabaseUrl && reviewConfig.supabaseAnonKey && window.supabase
+  );
+  const isReviewModerator = () => reviewUser &&
+    reviewUser.email && reviewUser.email.toLowerCase() === reviewConfig.adminEmail.toLowerCase();
+
+  function setReviewFeedback(message, isError = false) {
+    if (!reviewFeedback) return;
+    reviewFeedback.textContent = message;
+    reviewFeedback.classList.toggle('is-error', isError);
+  }
+
+  function formatReviewDate(value) {
+    return new Intl.DateTimeFormat('en-IN', {
+      day: 'numeric', month: 'short', year: 'numeric'
+    }).format(new Date(value));
+  }
+
+  function makeReviewCard(review) {
+    const card = document.createElement('article');
+    card.className = 'review-card';
+
+    const top = document.createElement('div');
+    top.className = 'review-card-top';
+    const identity = document.createElement('div');
+    const name = document.createElement('strong');
+    name.className = 'reviewer-name';
+    name.textContent = review.reviewer_name;
+    const date = document.createElement('time');
+    date.className = 'review-date';
+    date.dateTime = review.created_at;
+    date.textContent = formatReviewDate(review.created_at);
+    identity.append(name, date);
+
+    const stars = document.createElement('span');
+    stars.className = 'review-stars';
+    stars.setAttribute('aria-label', `${review.rating} out of 5 stars`);
+    stars.textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
+    top.append(identity, stars);
+    card.append(top);
+
+    const body = document.createElement('p');
+    body.textContent = review.body;
+    card.append(body);
+
+    if (isReviewModerator()) {
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'review-delete';
+      deleteButton.textContent = 'Delete review';
+      deleteButton.addEventListener('click', () => deleteReview(review.id));
+      card.append(deleteButton);
+    }
+    return card;
+  }
+
+  async function loadReviews() {
+    if (!reviewsClient || !reviewsList) return;
+    reviewsCount.textContent = 'Loading reviews…';
+    const { data, error } = await reviewsClient
+      .from('reviews')
+      .select('id, reviewer_name, rating, body, created_at')
+      .order('created_at', { ascending: false });
+
+    reviewsList.replaceChildren();
+    if (error) {
+      reviewsCount.textContent = 'Reviews are temporarily unavailable.';
+      console.error('Could not load reviews:', error.message);
+      return;
+    }
+    reviewsCount.textContent = `${data.length} ${data.length === 1 ? 'review' : 'reviews'}`;
+    if (!data.length) {
+      const empty = document.createElement('p');
+      empty.className = 'reviews-empty';
+      empty.textContent = 'Be the first to share your Ayuroma experience.';
+      reviewsList.append(empty);
+      return;
+    }
+    data.forEach(review => reviewsList.append(makeReviewCard(review)));
+  }
+
+  function renderReviewAccount() {
+    if (!reviewsAreConfigured) return;
+    const signedIn = Boolean(reviewUser);
+    googleSignInBtn.hidden = signedIn;
+    reviewSignOutBtn.hidden = !signedIn;
+    reviewForm.hidden = !signedIn;
+    if (!signedIn) {
+      reviewsAccountCopy.textContent = 'Please sign in with Google before leaving a review.';
+      reviewSignedInAs.textContent = '';
+      return;
+    }
+    const reviewerName = reviewUser.user_metadata?.full_name || reviewUser.user_metadata?.name || reviewUser.email;
+    reviewsAccountCopy.textContent = isReviewModerator()
+      ? 'You are signed in as the review moderator.'
+      : 'You are signed in and can share your experience.';
+    reviewSignedInAs.textContent = `Signed in as ${reviewerName}`;
+  }
+
+  async function deleteReview(id) {
+    if (!isReviewModerator() || !window.confirm('Delete this review permanently?')) return;
+    const { error } = await reviewsClient.from('reviews').delete().eq('id', id);
+    if (error) {
+      setReviewFeedback('This review could not be deleted. Please try again.', true);
+      console.error('Could not delete review:', error.message);
+      return;
+    }
+    setReviewFeedback('Review deleted.');
+    loadReviews();
+  }
+
+  if (reviewsAreConfigured) {
+    reviewsClient = window.supabase.createClient(reviewConfig.supabaseUrl, reviewConfig.supabaseAnonKey);
+
+    function scrollToReviewsAfterSignIn() {
+      if (window.sessionStorage.getItem('ayuromaReturnToReviews') !== 'true') return;
+      window.sessionStorage.removeItem('ayuromaReturnToReviews');
+      document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    googleSignInBtn.addEventListener('click', async () => {
+      window.sessionStorage.setItem('ayuromaReturnToReviews', 'true');
+      const { error } = await reviewsClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: `${window.location.origin}${window.location.pathname}` }
+      });
+      if (error) setReviewFeedback('Google sign-in could not start. Please try again.', true);
+    });
+
+    reviewSignOutBtn.addEventListener('click', async () => {
+      await reviewsClient.auth.signOut();
+      setReviewFeedback('You have been signed out.');
+    });
+
+    reviewForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!reviewUser) return;
+      const body = document.getElementById('reviewBody').value.trim();
+      const rating = Number(document.getElementById('reviewRating').value);
+      const reviewerName = reviewUser.user_metadata?.full_name || reviewUser.user_metadata?.name || reviewUser.email.split('@')[0];
+      if (body.length < 3) {
+        setReviewFeedback('Please write at least 3 characters.', true);
+        return;
+      }
+      reviewSubmitBtn.disabled = true;
+      reviewSubmitBtn.textContent = 'Posting…';
+      const { error } = await reviewsClient.from('reviews').insert({
+        reviewer_name: reviewerName.slice(0, 100), rating, body
+      });
+      reviewSubmitBtn.disabled = false;
+      reviewSubmitBtn.textContent = 'Post Review ✦';
+      if (error) {
+        setReviewFeedback('Your review could not be posted. Please try again.', true);
+        console.error('Could not post review:', error.message);
+        return;
+      }
+      reviewForm.reset();
+      setReviewFeedback('Thank you—your review is now live.');
+      loadReviews();
+    });
+
+    reviewsClient.auth.getSession().then(({ data: { session } }) => {
+      reviewUser = session?.user || null;
+      renderReviewAccount();
+      loadReviews();
+      if (reviewUser) scrollToReviewsAfterSignIn();
+    });
+    reviewsClient.auth.onAuthStateChange((_event, session) => {
+      reviewUser = session?.user || null;
+      renderReviewAccount();
+      loadReviews();
+      if (reviewUser) scrollToReviewsAfterSignIn();
+    });
+  } else if (reviewsAccountCopy && reviewsCount) {
+    reviewsAccountCopy.textContent = 'Reviews will be available shortly.';
+    reviewsCount.textContent = 'Reviews are being set up.';
+  }
+
   /* ─── SMOOTH PARALLAX ON HERO IMAGES ─── */
   const heroImgs = document.querySelectorAll('.hero-product-img');
   window.addEventListener('scroll', () => {

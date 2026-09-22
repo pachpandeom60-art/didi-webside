@@ -32,6 +32,7 @@
       <li><a href="#story">Our Story</a></li>
       <li><a href="#products">Products</a></li>
       <li><a href="#ingredients">Ingredients</a></li>
+      <li><a href="#reviews">Reviews</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
@@ -519,6 +520,57 @@
   </section>
 
   <!-- ======== CONTACT ======== -->
+  <!-- ======== REVIEWS ======== -->
+  <section id="reviews" class="reviews section">
+    <div class="section-header fade-up">
+      <p class="section-eyebrow">Your Experience</p>
+      <h2 class="section-title">Loved Your<br /><em>Ayuroma Ritual?</em></h2>
+      <p class="reviews-intro">Sign in with Google to share an honest review. Reviews are checked to keep this space helpful and kind.</p>
+    </div>
+
+    <div class="reviews-shell glass-card fade-up">
+      <div class="reviews-account" id="reviewsAccount">
+        <div>
+          <p class="reviews-account-label">Write a review</p>
+          <p class="reviews-account-copy" id="reviewsAccountCopy">Please sign in with Google before leaving a review.</p>
+        </div>
+        <div class="reviews-account-actions">
+          <button class="btn btn--primary" type="button" id="googleSignInBtn">Continue with Google</button>
+          <button class="reviews-sign-out" type="button" id="reviewSignOutBtn" hidden>Sign out</button>
+        </div>
+      </div>
+
+      <form class="review-form" id="reviewForm" hidden>
+        <div class="review-form-top">
+          <div class="form-group review-rating-group">
+            <label for="reviewRating">Your rating</label>
+            <select id="reviewRating" name="rating" required>
+              <option value="5">★★★★★ — 5 / 5</option>
+              <option value="4">★★★★☆ — 4 / 5</option>
+              <option value="3">★★★☆☆ — 3 / 5</option>
+              <option value="2">★★☆☆☆ — 2 / 5</option>
+              <option value="1">★☆☆☆☆ — 1 / 5</option>
+            </select>
+          </div>
+          <p class="review-signed-in-as" id="reviewSignedInAs"></p>
+        </div>
+        <div class="form-group">
+          <label for="reviewBody">Your review</label>
+          <textarea id="reviewBody" name="review" rows="4" maxlength="1000" placeholder="Tell others about your experience with Ayuroma…" required></textarea>
+        </div>
+        <button class="btn btn--primary" type="submit" id="reviewSubmitBtn">Post Review ✦</button>
+        <p class="review-feedback" id="reviewFeedback" aria-live="polite"></p>
+      </form>
+
+      <div class="reviews-list-heading">
+        <h3>Customer Reviews</h3>
+        <p id="reviewsCount">Loading reviews…</p>
+      </div>
+      <div class="reviews-list" id="reviewsList" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ======== CONTACT ======== -->
   <section id="contact" class="contact section">
     <div class="section-header fade-up">
       <p class="section-eyebrow">Get In Touch</p>
@@ -600,6 +652,9 @@
     </div>
   </div>
 
-  <script src="script-premium.js?v=29"></script>
+  <!-- Add your Supabase URL and publishable/anon key to review-config.js before launching reviews. -->
+  <script src="review-config.js?v=1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script-premium.js?v=30"></script>
 </body>
 </html>
