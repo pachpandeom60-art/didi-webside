@@ -316,41 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ─── SOURCING MAP INTERACTIVITY ─── */
-  const mapPins = document.querySelectorAll('.map-pin');
-  const mapTooltip = document.getElementById('mapTooltip');
-  
-  if (mapPins.length > 0 && mapTooltip) {
-    const tooltipTitle = mapTooltip.querySelector('.tooltip-title');
-    const tooltipRegion = mapTooltip.querySelector('.tooltip-region');
-    const tooltipStory = mapTooltip.querySelector('.tooltip-story');
-    
-    mapPins.forEach(pin => {
-      pin.addEventListener('mouseenter', () => {
-        mapPins.forEach(p => p.classList.remove('active'));
-        pin.classList.add('active');
-        
-        tooltipTitle.textContent = pin.getAttribute('data-title');
-        tooltipRegion.textContent = pin.getAttribute('data-region');
-        tooltipStory.textContent = pin.getAttribute('data-story');
-        
-        mapTooltip.classList.add('visible');
-      });
-      
-      pin.addEventListener('mouseleave', () => {
-        pin.classList.remove('active');
-      });
-    });
-    
-    const mapContainer = document.querySelector('.map-container');
-    if (mapContainer) {
-      mapContainer.addEventListener('mouseleave', () => {
-        mapTooltip.classList.remove('visible');
-        mapPins.forEach(p => p.classList.remove('active'));
-      });
-    }
-  }
-
   function openCartModal() {
     cartModal.classList.add('open');
     updateCartModalUI();
@@ -388,25 +353,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ─── GOOGLE-SIGNED-IN REVIEWS (SUPABASE) ─── */
+  /* ─── GOOGLE-SIGNED-IN REVIEWS & PROFILE (SUPABASE) ─── */
   const reviewConfig = window.AYUROMA_REVIEWS_CONFIG;
   const reviewsList = document.getElementById('reviewsList');
   const reviewsCount = document.getElementById('reviewsCount');
   const reviewsAccountCopy = document.getElementById('reviewsAccountCopy');
   const googleSignInBtn = document.getElementById('googleSignInBtn');
   const reviewSignOutBtn = document.getElementById('reviewSignOutBtn');
+  const reviewViewProfileBtn = document.getElementById('reviewViewProfileBtn');
   const reviewForm = document.getElementById('reviewForm');
   const reviewSignedInAs = document.getElementById('reviewSignedInAs');
   const reviewFeedback = document.getElementById('reviewFeedback');
   const reviewSubmitBtn = document.getElementById('reviewSubmitBtn');
+  const reviewRatingInput = document.getElementById('reviewRating');
+  const ratingSelectedText = document.getElementById('ratingSelectedText');
+  const starPickBtns = document.querySelectorAll('.star-pick-btn');
+
+  // Profile Modal Elements
+  const navProfileBtn = document.getElementById('navProfileBtn');
+  const navProfileAvatar = document.getElementById('navProfileAvatar');
+  const navProfileText = document.getElementById('navProfileText');
+  const profileModal = document.getElementById('profileModal');
+  const profileModalClose = document.getElementById('profileModalClose');
+  const profileGuestView = document.getElementById('profileGuestView');
+  const profileUserView = document.getElementById('profileUserView');
+  const modalGoogleSignInBtn = document.getElementById('modalGoogleSignInBtn');
+  const modalSignOutBtn = document.getElementById('modalSignOutBtn');
+  const profileUserAvatarImg = document.getElementById('profileUserAvatarImg');
+  const profileUserAvatarFallback = document.getElementById('profileUserAvatarFallback');
+  const profileUserName = document.getElementById('profileUserName');
+  const profileUserEmail = document.getElementById('profileUserEmail');
+  const profileUserReviewsCount = document.getElementById('profileUserReviewsCount');
+  const profileUserRatingAvg = document.getElementById('profileUserRatingAvg');
+  const profileMyReviewsList = document.getElementById('profileMyReviewsList');
+
+  // Stats elements
+  const ratingAverageScore = document.getElementById('ratingAverageScore');
+  const ratingHeroStars = document.getElementById('ratingHeroStars');
+  const ratingTotalReviews = document.getElementById('ratingTotalReviews');
+
   let reviewUser = null;
   let reviewsClient = null;
+  let allReviewsData = [];
 
   const reviewsAreConfigured = Boolean(
     reviewConfig && reviewConfig.supabaseUrl && reviewConfig.supabaseAnonKey && window.supabase
   );
   const isReviewModerator = () => reviewUser &&
-    reviewUser.email && reviewUser.email.toLowerCase() === reviewConfig.adminEmail.toLowerCase();
+    reviewUser.email && reviewUser.email.toLowerCase() === (reviewConfig?.adminEmail || '').toLowerCase();
 
   function setReviewFeedback(message, isError = false) {
     if (!reviewFeedback) return;
@@ -420,32 +414,116 @@ document.addEventListener('DOMContentLoaded', () => {
     }).format(new Date(value));
   }
 
+  /* ── Interactive Star Rating Picker ── */
+  const ratingLabels = {
+    1: '1 / 5 — Needs Improvement',
+    2: '2 / 5 — Fair',
+    3: '3 / 5 — Good',
+    4: '4 / 5 — Very Good',
+    5: '5 / 5 — Excellent'
+  };
+
+  function updateStarRatingUI(value) {
+    if (reviewRatingInput) reviewRatingInput.value = value;
+    if (ratingSelectedText) ratingSelectedText.textContent = ratingLabels[value] || `${value} / 5`;
+    starPickBtns.forEach(btn => {
+      const btnVal = Number(btn.getAttribute('data-val'));
+      btn.classList.toggle('active', btnVal <= value);
+    });
+  }
+
+  starPickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = Number(btn.getAttribute('data-val'));
+      updateStarRatingUI(val);
+    });
+    btn.addEventListener('mouseenter', () => {
+      const hoverVal = Number(btn.getAttribute('data-val'));
+      starPickBtns.forEach(b => {
+        const bVal = Number(b.getAttribute('data-val'));
+        b.classList.toggle('active', bVal <= hoverVal);
+      });
+      if (ratingSelectedText) ratingSelectedText.textContent = ratingLabels[hoverVal] || `${hoverVal} / 5`;
+    });
+  });
+
+  const starRatingPickerEl = document.getElementById('starRatingPicker');
+  if (starRatingPickerEl) {
+    starRatingPickerEl.addEventListener('mouseleave', () => {
+      const cur = Number(reviewRatingInput?.value || 5);
+      updateStarRatingUI(cur);
+    });
+  }
+
+  /* ── Review Card Builder ── */
   function makeReviewCard(review) {
     const card = document.createElement('article');
     card.className = 'review-card';
 
     const top = document.createElement('div');
     top.className = 'review-card-top';
-    const identity = document.createElement('div');
+
+    const userMeta = document.createElement('div');
+    userMeta.className = 'review-user-meta';
+
+    // Avatar
+    const initial = (review.reviewer_name || 'A').trim().charAt(0).toUpperCase();
+    const avatarEl = document.createElement('div');
+    avatarEl.className = 'reviewer-avatar-placeholder';
+    avatarEl.textContent = initial;
+
+    const details = document.createElement('div');
+    details.className = 'reviewer-details';
+
+    const nameRow = document.createElement('div');
+    nameRow.className = 'reviewer-name-row';
+
     const name = document.createElement('strong');
     name.className = 'reviewer-name';
     name.textContent = review.reviewer_name;
+
+    const verified = document.createElement('span');
+    verified.className = 'verified-buyer-tag';
+    verified.textContent = 'Verified Ritual';
+
+    nameRow.append(name, verified);
+
     const date = document.createElement('time');
     date.className = 'review-date';
     date.dateTime = review.created_at;
     date.textContent = formatReviewDate(review.created_at);
-    identity.append(name, date);
+
+    details.append(nameRow, date);
+    userMeta.append(avatarEl, details);
 
     const stars = document.createElement('span');
     stars.className = 'review-stars';
     stars.setAttribute('aria-label', `${review.rating} out of 5 stars`);
     stars.textContent = `${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}`;
-    top.append(identity, stars);
+
+    top.append(userMeta, stars);
     card.append(top);
 
     const body = document.createElement('p');
     body.textContent = review.body;
     card.append(body);
+
+    const footer = document.createElement('div');
+    footer.className = 'review-card-footer';
+
+    // Helpful button
+    const helpfulBtn = document.createElement('button');
+    helpfulBtn.type = 'button';
+    helpfulBtn.className = 'review-helpful-btn';
+    let helpfulCount = Math.floor(Math.random() * 4) + 1;
+    helpfulBtn.innerHTML = `🌿 Helpful (${helpfulCount})`;
+    helpfulBtn.addEventListener('click', () => {
+      helpfulCount++;
+      helpfulBtn.innerHTML = `🌿 Helpful (${helpfulCount})`;
+      helpfulBtn.style.color = 'var(--green)';
+      helpfulBtn.disabled = true;
+    }, { once: true });
+    footer.append(helpfulBtn);
 
     if (isReviewModerator()) {
       const deleteButton = document.createElement('button');
@@ -453,9 +531,56 @@ document.addEventListener('DOMContentLoaded', () => {
       deleteButton.className = 'review-delete';
       deleteButton.textContent = 'Delete review';
       deleteButton.addEventListener('click', () => deleteReview(review.id));
-      card.append(deleteButton);
+      footer.append(deleteButton);
     }
+
+    card.append(footer);
     return card;
+  }
+
+  /* ── Aggregate Review Breakdown ── */
+  function updateReviewsBreakdown(reviews) {
+    const total = reviews.length;
+    if (total === 0) {
+      if (ratingAverageScore) ratingAverageScore.textContent = '5.0';
+      if (ratingHeroStars) ratingHeroStars.textContent = '★★★★★';
+      if (ratingTotalReviews) ratingTotalReviews.textContent = 'No reviews yet';
+      for (let s = 1; s <= 5; s++) {
+        const countEl = document.getElementById(`countStar${s}`);
+        if (countEl) countEl.textContent = '0';
+        const row = document.querySelector(`.rating-bar-row[data-star="${s}"] .bar-fill`);
+        if (row) row.style.width = '0%';
+      }
+      return;
+    }
+
+    const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let sum = 0;
+    reviews.forEach(r => {
+      const star = Math.min(5, Math.max(1, r.rating || 5));
+      counts[star] = (counts[star] || 0) + 1;
+      sum += star;
+    });
+
+    const avg = (sum / total).toFixed(1);
+    if (ratingAverageScore) ratingAverageScore.textContent = avg;
+    if (ratingHeroStars) {
+      const roundedAvg = Math.round(Number(avg));
+      ratingHeroStars.textContent = `${'★'.repeat(roundedAvg)}${'☆'.repeat(5 - roundedAvg)}`;
+    }
+    if (ratingTotalReviews) {
+      ratingTotalReviews.textContent = `Based on ${total} verified ${total === 1 ? 'review' : 'reviews'}`;
+    }
+
+    for (let s = 1; s <= 5; s++) {
+      const countEl = document.getElementById(`countStar${s}`);
+      if (countEl) countEl.textContent = counts[s];
+      const row = document.querySelector(`.rating-bar-row[data-star="${s}"] .bar-fill`);
+      if (row) {
+        const pct = Math.round((counts[s] / total) * 100);
+        row.style.width = `${pct}%`;
+      }
+    }
   }
 
   async function loadReviews() {
@@ -463,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
     reviewsCount.textContent = 'Loading reviews…';
     const { data, error } = await reviewsClient
       .from('reviews')
-      .select('id, reviewer_name, rating, body, created_at')
+      .select('id, user_id, reviewer_name, rating, body, created_at')
       .order('created_at', { ascending: false });
 
     reviewsList.replaceChildren();
@@ -472,7 +597,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Could not load reviews:', error.message);
       return;
     }
-    reviewsCount.textContent = `${data.length} ${data.length === 1 ? 'review' : 'reviews'}`;
+
+    allReviewsData = data || [];
+    reviewsCount.textContent = `${data.length} community ${data.length === 1 ? 'review' : 'reviews'}`;
+    updateReviewsBreakdown(allReviewsData);
+    updateProfileUserView();
+
     if (!data.length) {
       const empty = document.createElement('p');
       empty.className = 'reviews-empty';
@@ -483,22 +613,119 @@ document.addEventListener('DOMContentLoaded', () => {
     data.forEach(review => reviewsList.append(makeReviewCard(review)));
   }
 
+  /* ── User Profile & Modal Handling ── */
+  function openProfileModal() {
+    if (profileModal) profileModal.classList.add('open');
+    updateProfileUserView();
+  }
+
+  function closeProfileModal() {
+    if (profileModal) profileModal.classList.remove('open');
+  }
+
+  if (navProfileBtn) navProfileBtn.addEventListener('click', openProfileModal);
+  if (reviewViewProfileBtn) reviewViewProfileBtn.addEventListener('click', openProfileModal);
+  if (profileModalClose) profileModalClose.addEventListener('click', closeProfileModal);
+  if (profileModal) {
+    profileModal.addEventListener('click', (e) => {
+      if (e.target === profileModal) closeProfileModal();
+    });
+  }
+
   function renderReviewAccount() {
     if (!reviewsAreConfigured) return;
     const signedIn = Boolean(reviewUser);
     googleSignInBtn.hidden = signedIn;
     reviewSignOutBtn.hidden = !signedIn;
+    if (reviewViewProfileBtn) reviewViewProfileBtn.hidden = !signedIn;
     reviewForm.hidden = !signedIn;
+
+    // Update navbar profile button
+    if (navProfileText) {
+      navProfileText.textContent = signedIn ? (reviewUser.user_metadata?.full_name?.split(' ')[0] || 'Profile') : 'Sign In';
+    }
+    if (navProfileAvatar) {
+      const photo = reviewUser?.user_metadata?.avatar_url || reviewUser?.user_metadata?.picture;
+      if (signedIn && photo) {
+        navProfileAvatar.innerHTML = `<img src="${photo}" alt="Avatar" />`;
+      } else if (signedIn) {
+        const initial = (reviewUser.user_metadata?.full_name || reviewUser.email || 'U')[0].toUpperCase();
+        navProfileAvatar.textContent = initial;
+      } else {
+        navProfileAvatar.textContent = '👤';
+      }
+    }
+
     if (!signedIn) {
-      reviewsAccountCopy.textContent = 'Please sign in with Google before leaving a review.';
+      reviewsAccountCopy.textContent = 'Please sign in with Google to post your review.';
       reviewSignedInAs.textContent = '';
+      if (profileGuestView) profileGuestView.hidden = false;
+      if (profileUserView) profileUserView.hidden = true;
       return;
     }
+
+    if (profileGuestView) profileGuestView.hidden = true;
+    if (profileUserView) profileUserView.hidden = false;
+
     const reviewerName = reviewUser.user_metadata?.full_name || reviewUser.user_metadata?.name || reviewUser.email;
     reviewsAccountCopy.textContent = isReviewModerator()
       ? 'You are signed in as the review moderator.'
       : 'You are signed in and can share your experience.';
-    reviewSignedInAs.textContent = `Signed in as ${reviewerName}`;
+    reviewSignedInAs.textContent = `Posting as ${reviewerName}`;
+
+    updateProfileUserView();
+  }
+
+  function updateProfileUserView() {
+    if (!reviewUser || !profileUserView) return;
+    const meta = reviewUser.user_metadata || {};
+    const name = meta.full_name || meta.name || reviewUser.email.split('@')[0];
+    const email = reviewUser.email;
+    const avatar = meta.avatar_url || meta.picture;
+
+    if (profileUserName) profileUserName.textContent = name;
+    if (profileUserEmail) profileUserEmail.textContent = email;
+
+    if (avatar && profileUserAvatarImg && profileUserAvatarFallback) {
+      profileUserAvatarImg.src = avatar;
+      profileUserAvatarImg.style.display = 'block';
+      profileUserAvatarFallback.style.display = 'none';
+    } else if (profileUserAvatarFallback) {
+      profileUserAvatarFallback.textContent = (name || 'A')[0].toUpperCase();
+      profileUserAvatarFallback.style.display = 'flex';
+      if (profileUserAvatarImg) profileUserAvatarImg.style.display = 'none';
+    }
+
+    // Filter reviews belonging to this user
+    const myReviews = allReviewsData.filter(r => r.user_id === reviewUser.id || (r.reviewer_name && r.reviewer_name === name));
+    if (profileUserReviewsCount) profileUserReviewsCount.textContent = myReviews.length;
+
+    if (myReviews.length > 0) {
+      const avg = (myReviews.reduce((sum, r) => sum + r.rating, 0) / myReviews.length).toFixed(1);
+      if (profileUserRatingAvg) profileUserRatingAvg.textContent = `${avg} ★`;
+    } else {
+      if (profileUserRatingAvg) profileUserRatingAvg.textContent = '—';
+    }
+
+    if (profileMyReviewsList) {
+      profileMyReviewsList.replaceChildren();
+      if (!myReviews.length) {
+        profileMyReviewsList.innerHTML = '<p class="profile-empty-reviews">You haven\'t written any reviews yet. Scroll to our reviews section to share your thoughts!</p>';
+      } else {
+        myReviews.forEach(r => {
+          const div = document.createElement('div');
+          div.className = 'profile-my-review-card';
+          div.innerHTML = `
+            <div class="profile-my-review-top">
+              <span style="color:#f59e0b; font-weight:bold;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              <span style="color:var(--text-muted);">${formatReviewDate(r.created_at)}</span>
+            </div>
+            <p style="margin:0; color:var(--text-main); font-size:0.86rem; line-height:1.5;">${r.body}</p>
+          `;
+          profileMyReviewsList.appendChild(div);
+        });
+      }
+    }
   }
 
   async function deleteReview(id) {
@@ -522,25 +749,34 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    googleSignInBtn.addEventListener('click', async () => {
+    const startOAuthSignIn = async () => {
       window.sessionStorage.setItem('ayuromaReturnToReviews', 'true');
       const { error } = await reviewsClient.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${window.location.origin}${window.location.pathname}` }
       });
       if (error) setReviewFeedback('Google sign-in could not start. Please try again.', true);
-    });
+    };
 
-    reviewSignOutBtn.addEventListener('click', async () => {
+    googleSignInBtn.addEventListener('click', startOAuthSignIn);
+    if (modalGoogleSignInBtn) modalGoogleSignInBtn.addEventListener('click', startOAuthSignIn);
+
+    const performSignOut = async () => {
       await reviewsClient.auth.signOut();
+      reviewUser = null;
+      renderReviewAccount();
       setReviewFeedback('You have been signed out.');
-    });
+      closeProfileModal();
+    };
+
+    reviewSignOutBtn.addEventListener('click', performSignOut);
+    if (modalSignOutBtn) modalSignOutBtn.addEventListener('click', performSignOut);
 
     reviewForm.addEventListener('submit', async event => {
       event.preventDefault();
       if (!reviewUser) return;
       const body = document.getElementById('reviewBody').value.trim();
-      const rating = Number(document.getElementById('reviewRating').value);
+      const rating = Number(reviewRatingInput ? reviewRatingInput.value : 5);
       const reviewerName = reviewUser.user_metadata?.full_name || reviewUser.user_metadata?.name || reviewUser.email.split('@')[0];
       if (body.length < 3) {
         setReviewFeedback('Please write at least 3 characters.', true);
@@ -552,13 +788,14 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewer_name: reviewerName.slice(0, 100), rating, body
       });
       reviewSubmitBtn.disabled = false;
-      reviewSubmitBtn.textContent = 'Post Review ✦';
+      reviewSubmitBtn.textContent = 'Post Your Review ✦';
       if (error) {
         setReviewFeedback('Your review could not be posted. Please try again.', true);
         console.error('Could not post review:', error.message);
         return;
       }
       reviewForm.reset();
+      updateStarRatingUI(5);
       setReviewFeedback('Thank you—your review is now live.');
       loadReviews();
     });
